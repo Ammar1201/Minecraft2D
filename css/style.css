@@ -36,45 +36,7 @@ body {
   background: #87ceeb; /*#38B0DE*/
 }
 
-/*! World Blocks */
-.dirt {
-  background: url('../img/worldBlocks/dirt.jpg') no-repeat center center/cover;
-  width: 100%;
-  height: 100%;
-}
-
-.grass {
-  background: url('../img/worldBlocks/grass.png') no-repeat center center/cover;
-  width: 100%;
-  height: 100%;
-}
-
-.wood {
-  background: url('../img/worldBlocks/oakWood.png') no-repeat center center/cover;
-  width: 100%;
-  height: 100%;
-}
-
-.leaves {
-  background: url('../img/worldBlocks/leaves.jpg') no-repeat center center/cover;
-  width: 100%;
-  height: 100%;
-}
-
-.stone {
-  background: url('../img/worldBlocks/stone.png') no-repeat center center/cover;
-  width: 100%;
-  height: 100%;
-}
-
-.cloud {
-  background: white;
-  width: 100%;
-  height: 100%;
-}
-
 /*! ToolBar*/
-
 img {
   width: 50px;
   height: 50px;
@@ -91,8 +53,6 @@ img {
 }
 
 #toolBar button {
-  /* width: 100px;
-  height: 50px; */
   padding: 1rem 4rem;
 }
 
@@ -104,9 +64,91 @@ img {
   display: flex;
 }
 
-#inventory div{
+#inventory > div{
   width: 100px;
   height: 100px;
-  background: #fff;
   margin-right: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+}
+
+#inventory div div{
+  width: 100px;
+  height: 100px;
+  margin-top: 10px;
+}
+
+/*! Utilities*/
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.displayAll {
+  display: all;
+}
+
+.displayNone {
+  display: none;
+}
+
+/*! World Blocks */
+.dirt {
+  background: url('../img/worldBlocks/dirt.jpg') no-repeat center center/cover;
+  width: 100%;
+  height: 100%;
+}
+
+.dirt:hover {
+  opacity: 0.85;
+}
+
+.grass {
+  background: url('../img/worldBlocks/grass.png') no-repeat center center/cover;
+  width: 100%;
+  height: 100%;
+}
+
+.grass:hover {
+  opacity: 0.85;
+}
+
+.wood {
+  background: url('../img/worldBlocks/oakWood.png') no-repeat center center/cover;
+  width: 100%;
+  height: 100%;
+}
+
+.wood:hover {
+  opacity: 0.85;
+}
+
+.leaves {
+  background: url('../img/worldBlocks/leaves.jpg') no-repeat center center/cover;
+  width: 100%;
+  height: 100%;
+}
+
+.leaves:hover {
+  opacity: 0.85;
+}
+
+.stone {
+  background: url('../img/worldBlocks/stone.png') no-repeat center center/cover;
+  width: 100%;
+  height: 100%;
+}
+
+.stone:hover {
+  opacity: 0.85;
+}
+
+.cloud {
+  background: white;
+  width: 100%;
+  height: 100%;
 }
