@@ -1,9 +1,18 @@
 
+const variables = {
+  inventory: [],
+  selectedTool: '',
+  toggled: false
+}
+
+const WORLD_GRID_ROWS = 20; // this must match #world style grid-template-rows
+const WORLD_GRID_COLUMNS = 30; // this must match #world style grid-template-columns
+
 const startBtn = document.querySelector('#startBtn');
 const world = document.querySelector('#world');
 const toolBar = document.querySelector('#toolBar');
-const WORLD_GRID_ROWS = 20; // this must match #world style grid-template-rows
-const WORLD_GRID_COLUMNS = 30; // this must match #world style grid-template-columns
+const inventory = document.querySelector('#inventory');
+const inventoryBtn = document.querySelector('#inventoryBtn');
 
 const createWorld = () => {
   for(let i = 0; i < WORLD_GRID_ROWS; i++) {
@@ -37,12 +46,12 @@ const createWorld = () => {
 
         //* add stone
         if(i == 11 || i == 12) {
-          if(j == 2 || j == 3 || j == 4 || j == 5) {
+          if(j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
             div.classList.add('stone');
           }
         }
         if(i === 9 || i == 10) {
-          if(j == 3 || j == 4) {
+          if(j == 3 || j == 4 || j == 5 || j == 6) {
             div.classList.add('stone');
           }
         }
@@ -63,7 +72,21 @@ const createWorld = () => {
 createWorld();
 
 world.addEventListener('click', (event) => {
-  console.log(event.target);
+  console.log(event.target.classList);
 },
 { capture: true }
 );
+
+inventoryBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  if(!variables.toggled) {
+    variables.toggled = true;
+    inventory.classList.add('visible');
+    inventory.classList.remove('hidden');
+  }
+  else {
+    variables.toggled = false;
+    inventory.classList.remove('visible');
+    inventory.classList.add('hidden');
+  }
+});
