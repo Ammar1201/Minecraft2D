@@ -8,6 +8,27 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+/*! Utilities*/
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.displayAll {
+  display: all;
+}
+
+.displayNone {
+  display: none;
+}
+
+.border {
+  border: 8px solid black;
+}
+
 #landing-page{
   background: url('../img/landingPage.jpg') no-repeat center center/cover;
   height: 100vh;
@@ -77,23 +98,6 @@ img {
   width: 100px;
   height: 100px;
   margin-top: 10px;
-}
-
-/*! Utilities*/
-.visible {
-  visibility: visible;
-}
-
-.hidden {
-  visibility: hidden;
-}
-
-.displayAll {
-  display: all;
-}
-
-.displayNone {
-  display: none;
 }
 
 /*! World Blocks */
