@@ -1,3 +1,28 @@
-h1 {
-  color: gray;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+#landing-page{
+  background: url('../img/minecraft.jpg') no-repeat center center/cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#startBtn {
+  padding: 1rem 4rem;
+  background: gray;
+  color: #fff;
+  font-size: 1rem;
+}
+
+#startBtn:hover {
+  cursor: pointer;
 }
