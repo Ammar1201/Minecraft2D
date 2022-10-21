@@ -3,6 +3,7 @@ const variables = {
   inventory: {},
   selectedTool: '',
   lastRemovedBlock: '',
+  lastRemovedInventoryBlock: '',
   inventoryToggled: false
 }
 
@@ -72,7 +73,7 @@ const createWorld = () => {
   }
 }
 
-createWorld();
+//! ---------------------Functions-------------------------------------------------------------------
 
 const updateInventoryVariable = () => {
   if(variables.inventory[variables.lastRemovedBlock] == undefined) {
@@ -82,6 +83,8 @@ const updateInventoryVariable = () => {
     variables.inventory[variables.lastRemovedBlock] += 1;
   }
 }
+
+//* ------------------------------------------------------------------------
 
 const addToInventory = (lastRemovedBlock) => {
   let child = inventoryBlocks.firstElementChild;
@@ -113,11 +116,15 @@ const addToInventory = (lastRemovedBlock) => {
   }
 }
 
+//* ------------------------------------------------------------------------
+
 const removeBlockAccordingToTheTool = (target) => {
   target.classList.remove(variables.lastRemovedBlock);
   updateInventoryVariable();
   addToInventory(variables.lastRemovedBlock);
 }
+
+//* ------------------------------------------------------------------------
 
 const removeBlock = (target) => {
   if(variables.lastRemovedBlock == 'grass' || variables.lastRemovedBlock == 'dirt') {
@@ -137,36 +144,14 @@ const removeBlock = (target) => {
   }
 }
 
-world.addEventListener('click', (event) => {
-  const target = event.target;
-  if(target.classList.length == 1 && target.classList[0] !== 'cloud') {
-    variables.lastRemovedBlock = target.classList[0];
-    removeBlock(target);
-  }
-},
-{ capture: true }
-);
-
-inventoryBtn.addEventListener('click', (event) => {
-  event.preventDefault();
-  if(!variables.inventoryToggled) {
-    variables.inventoryToggled = true;
-    inventoryBlocks.classList.add('visible');
-    inventoryBlocks.classList.remove('hidden');
-  }
-  else {
-    variables.inventoryToggled = false;
-    inventoryBlocks.classList.remove('visible');
-    inventoryBlocks.classList.add('hidden');
-  }
-});
+//* ------------------------------------------------------------------------
 
 const selectFirstTool = (target) => {
   if(target.id == '') {
     target = target.parentElement;
   }
   variables.selectedTool = target.id;
-  target.classList.toggle('border');
+  target.classList.toggle('selected');
 };
 
 const updateSelectedTool = (target) => {
@@ -175,28 +160,84 @@ const updateSelectedTool = (target) => {
   }
 
   const tool = document.querySelector(`#${variables.selectedTool}`);
-  tool.classList.remove('border');
-  target.classList.add('border');
+  tool.classList.remove('selected');
+  target.classList.add('selected');
   variables.selectedTool = target.id;
 };
 
-toolBarTools.addEventListener('click', (event) => {
-  const target = event.target;
-  if(variables.selectedTool === '') {
-    selectFirstTool(target);
-    return;
-  }
+//! ---------------------EventListeners-------------------------------------------------------------------
+const StartEventListeners = () => {
 
-  updateSelectedTool(target);
-},
-{ capture: true }
-);
+  world.addEventListener('click', (event) => {
+    const target = event.target;
+    if(target.classList.length == 1 && target.classList[0] !== 'cloud') {
+      variables.lastRemovedBlock = target.classList[0];
+      removeBlock(target);
+    }
+  },
+  { capture: true }
+  );
 
-resetBtn.addEventListener('click', (event) => {
-  event.preventDefault();
+  inventoryBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    if(!variables.inventoryToggled) {
+      variables.inventoryToggled = true;
+      inventoryBlocks.classList.add('visible');
+      inventoryBlocks.classList.remove('hidden');
+    }
+    else {
+      variables.inventoryToggled = false;
+      inventoryBlocks.classList.remove('visible');
+      inventoryBlocks.classList.add('hidden');
+    }
+  });
+
+  toolBarTools.addEventListener('click', (event) => {
+    const target = event.target;
+  
+    if(variables.selectedTool === 'placingBlocks') {
+      return;
+    }
+  
+    if(variables.selectedTool === '') {
+      selectFirstTool(target);
+      return;
+    }
+  
+    updateSelectedTool(target);
+  },
+  { capture: true }
+  );
+
+  inventoryBlocks.addEventListener('click', (event) => {
+    const target = event.target.parentElement;
+    if(target.classList[0] === undefined) {
+      return;
+    }
+  
+    variables.lastRemovedInventoryBlock = target.classList[0];
+    target.classList.add('selected');
+    const tool = document.querySelector(`#${variables.selectedTool}`);
+    tool.classList.remove('selected');
+    variables.selectedTool = 'placingBlocks';
+  
+  },
+  { capture: true }
+  );
+
+  resetBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    createWorld();
+    variables.inventory = {};
+    variables.selectedTool = '';
+    variables.lastRemovedBlock = '';
+    variables.inventoryToggled = false;
+  });
+}
+
+const main = () => {
   createWorld();
-  variables.inventory = {};
-  variables.selectedTool = '';
-  variables.lastRemovedBlock = '';
-  variables.inventoryToggled = false;
-});
+  StartEventListeners();
+}
+
+main();
