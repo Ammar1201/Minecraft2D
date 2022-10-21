@@ -21,6 +21,8 @@ const toolBarTools = document.querySelector('#toolBarTools');
 const inventorySlots = document.querySelectorAll('#inventory > div');
 
 const createWorld = () => {
+
+  //! generate world for mobile devices
   if(window.innerWidth < 770) {
     for(let i = 0; i < WORLD_GRID_ROWS; i++) {
       for(let j = 0; j < 20; j++) {
@@ -75,6 +77,7 @@ const createWorld = () => {
       }
     }
   }
+  //! generate world for other devices
   else {
     for(let i = 0; i < WORLD_GRID_ROWS; i++) {
       for(let j = 0; j < WORLD_GRID_COLUMNS; j++) {
@@ -242,6 +245,8 @@ const updateInventorySlots = () => {
     }
   });
 };
+
+//* ------------------------------------------------------------------------
 
 const placeBlock = (target) => {
   let amount = variables.inventory[variables.lastRemovedInventoryBlock];
