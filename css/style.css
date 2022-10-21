@@ -18,11 +18,11 @@ body {
 }
 
 .displayAll {
-  display: all;
+  display: block;
 }
 
 .displayNone {
-  display: none;
+  display: none !important;
 }
 
 .selected {
@@ -35,7 +35,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  display: none;
 }
 
 #startBtn {
