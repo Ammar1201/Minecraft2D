@@ -119,25 +119,29 @@ const removeBlockAccordingToTheTool = (target) => {
   addToInventory(variables.lastRemovedBlock);
 }
 
+const removeBlock = (target) => {
+  if(variables.lastRemovedBlock == 'grass' || variables.lastRemovedBlock == 'dirt') {
+    if(variables.selectedTool == 'shovel') {
+      removeBlockAccordingToTheTool(target);
+    }
+  }
+  if(variables.lastRemovedBlock == 'stone') {
+    if(variables.selectedTool == 'pickaxe') {
+      removeBlockAccordingToTheTool(target);
+    }
+  }
+  if(variables.lastRemovedBlock == 'wood' || variables.lastRemovedBlock == 'leaves') {
+    if(variables.selectedTool == 'axe') {
+      removeBlockAccordingToTheTool(target);
+    }
+  }
+}
+
 world.addEventListener('click', (event) => {
   const target = event.target;
   if(target.classList.length == 1 && target.classList[0] !== 'cloud') {
     variables.lastRemovedBlock = target.classList[0];
-    if(variables.lastRemovedBlock == 'grass' || variables.lastRemovedBlock == 'dirt') {
-      if(variables.selectedTool == 'shovel') {
-        removeBlockAccordingToTheTool(target);
-      }
-    }
-    if(variables.lastRemovedBlock == 'stone') {
-      if(variables.selectedTool == 'pickaxe') {
-        removeBlockAccordingToTheTool(target);
-      }
-    }
-    if(variables.lastRemovedBlock == 'wood' || variables.lastRemovedBlock == 'leaves') {
-      if(variables.selectedTool == 'axe') {
-        removeBlockAccordingToTheTool(target);
-      }
-    }
+    removeBlock(target);
   }
 },
 { capture: true }
