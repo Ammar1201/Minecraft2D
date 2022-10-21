@@ -12,7 +12,7 @@ const WORLD_GRID_COLUMNS = 30; // this must match #world style grid-template-col
 const startBtn = document.querySelector('#startBtn');
 const world = document.querySelector('#world');
 const toolBar = document.querySelector('#toolBar');
-const inventoryDiv = document.querySelector('#inventory');
+const inventoryBlocks = document.querySelector('#inventory');
 const inventoryBtn = document.querySelector('#inventoryBtn');
 const resetBtn = document.querySelector('#resetBtn');
 const toolBarTools = document.querySelector('#toolBarTools');
@@ -84,7 +84,7 @@ const updateInventoryVariable = () => {
 }
 
 const addToInventory = (lastRemovedBlock) => {
-  let child = inventoryDiv.firstElementChild;
+  let child = inventoryBlocks.firstElementChild;
   let length = child.classList.length;
   while(length == 1) {
     if(child.nextElementSibling == null) {
@@ -100,7 +100,7 @@ const addToInventory = (lastRemovedBlock) => {
   }
 
   if(child == null) {
-    child = inventoryDiv.firstElementChild;
+    child = inventoryBlocks.firstElementChild;
     while(!child.classList.contains(lastRemovedBlock)) {
       child = child.nextElementSibling;
     }
@@ -129,13 +129,13 @@ inventoryBtn.addEventListener('click', (event) => {
   event.preventDefault();
   if(!variables.inventoryToggled) {
     variables.inventoryToggled = true;
-    inventoryDiv.classList.add('visible');
-    inventoryDiv.classList.remove('hidden');
+    inventoryBlocks.classList.add('visible');
+    inventoryBlocks.classList.remove('hidden');
   }
   else {
     variables.inventoryToggled = false;
-    inventoryDiv.classList.remove('visible');
-    inventoryDiv.classList.add('hidden');
+    inventoryBlocks.classList.remove('visible');
+    inventoryBlocks.classList.add('hidden');
   }
 });
 
