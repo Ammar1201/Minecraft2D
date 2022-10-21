@@ -4,6 +4,7 @@ const variables = {
   selectedTool: '',
   lastRemovedBlock: '',
   lastRemovedInventoryBlock: '',
+  lastRemovedInventoryBlockAmount: '',
   inventoryToggled: false
 }
 
@@ -151,8 +152,10 @@ const selectFirstTool = (target) => {
     target = target.parentElement;
   }
   variables.selectedTool = target.id;
-  target.classList.toggle('selected');
+  target.classList.add('selected');
 };
+
+//* ------------------------------------------------------------------------
 
 const updateSelectedTool = (target) => {
   if(target.id == '') {
@@ -165,6 +168,37 @@ const updateSelectedTool = (target) => {
   variables.selectedTool = target.id;
 };
 
+//* ------------------------------------------------------------------------
+
+const updateInventoryAmount = () => {
+  let child = inventoryBlocks.firstElementChild;
+  while(!child.classList.contains(variables.lastRemovedInventoryBlock)) {
+    child = child.nextElementSibling;
+  }
+  
+  if(variables.inventory[variables.lastRemovedInventoryBlock] == 0) {
+    child.lastElementChild.textContent = '';
+    child.classList.remove(variables.lastRemovedInventoryBlock);
+  }
+  else {
+    child.lastElementChild.textContent = variables.inventory[variables.lastRemovedInventoryBlock];
+  }
+};
+
+const placeBlock = (target) => {
+  if(target.classList.length > 0) {
+    return;
+  }
+
+  let amount = parseInt(variables.inventory[variables.lastRemovedInventoryBlock]);
+  if(amount > 0) {
+    target.classList.add(variables.lastRemovedInventoryBlock);
+    amount -= 1;
+    variables.inventory[variables.lastRemovedInventoryBlock] = `${amount}`;
+    updateInventoryAmount();
+  }
+};
+
 //! ---------------------EventListeners-------------------------------------------------------------------
 const StartEventListeners = () => {
 
@@ -174,9 +208,15 @@ const StartEventListeners = () => {
       variables.lastRemovedBlock = target.classList[0];
       removeBlock(target);
     }
+
+    if(variables.selectedTool === 'placingBlocks') {
+      placeBlock(target);
+    }
   },
   { capture: true }
   );
+
+  //* ------------------------------------------------------------------------
 
   inventoryBtn.addEventListener('click', (event) => {
     event.preventDefault();
@@ -192,10 +232,13 @@ const StartEventListeners = () => {
     }
   });
 
+  //* ------------------------------------------------------------------------
+
   toolBarTools.addEventListener('click', (event) => {
     const target = event.target;
   
     if(variables.selectedTool === 'placingBlocks') {
+      selectFirstTool(target);
       return;
     }
   
@@ -209,21 +252,33 @@ const StartEventListeners = () => {
   { capture: true }
   );
 
+  //* ------------------------------------------------------------------------
+
   inventoryBlocks.addEventListener('click', (event) => {
     const target = event.target.parentElement;
     if(target.classList[0] === undefined) {
       return;
     }
   
+    if(target.classList[0] === 'selected') {
+      target.classList.remove('selected');
+      return;
+    }
+
     variables.lastRemovedInventoryBlock = target.classList[0];
-    target.classList.add('selected');
+    if(variables.selectedTool === 'placingBlocks') {
+      return;
+    }
     const tool = document.querySelector(`#${variables.selectedTool}`);
     tool.classList.remove('selected');
+    target.classList.add('selected');
     variables.selectedTool = 'placingBlocks';
-  
+    variables.lastRemovedInventoryBlockAmount = target.id;
   },
   { capture: true }
   );
+
+  //* ------------------------------------------------------------------------
 
   resetBtn.addEventListener('click', (event) => {
     event.preventDefault();
