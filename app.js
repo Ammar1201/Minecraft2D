@@ -139,9 +139,36 @@ inventoryBtn.addEventListener('click', (event) => {
   }
 });
 
+const selectFirstTool = (target) => {
+  if(target.id == '') {
+    target = target.parentElement;
+  }
+  variables.selectedTool = target.id;
+  target.classList.toggle('border');
+};
+
+const updateSelectedTool = (target) => {
+  if(target.id == '') {
+    target = target.parentElement;
+  }
+
+  const tool = document.querySelector(`#${variables.selectedTool}`);
+  tool.classList.remove('border');
+  target.classList.add('border');
+  variables.selectedTool = target.id;
+};
+
 toolBarTools.addEventListener('click', (event) => {
-  
-});
+  const target = event.target;
+  if(variables.selectedTool === '') {
+    selectFirstTool(target);
+    return;
+  }
+
+  updateSelectedTool(target);
+},
+{ capture: true }
+);
 
 resetBtn.addEventListener('click', (event) => {
   event.preventDefault();
