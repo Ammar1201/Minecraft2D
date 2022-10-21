@@ -109,6 +109,7 @@ img {
 
 .dirt:hover {
   opacity: 0.85;
+  cursor: pointer;
 }
 
 .grass {
@@ -119,6 +120,7 @@ img {
 
 .grass:hover {
   opacity: 0.85;
+  cursor: pointer;
 }
 
 .wood {
@@ -129,6 +131,7 @@ img {
 
 .wood:hover {
   opacity: 0.85;
+  cursor: pointer;
 }
 
 .leaves {
@@ -139,6 +142,7 @@ img {
 
 .leaves:hover {
   opacity: 0.85;
+  cursor: pointer;
 }
 
 .stone {
@@ -149,6 +153,7 @@ img {
 
 .stone:hover {
   opacity: 0.85;
+  cursor: pointer;
 }
 
 .cloud {

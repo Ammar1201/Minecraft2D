@@ -2,8 +2,8 @@
 const variables = {
   inventory: {},
   selectedTool: '',
-  lastSelectedBlock: '',
-  toggled: false
+  lastRemovedBlock: '',
+  inventoryToggled: false
 }
 
 const WORLD_GRID_ROWS = 20; // this must match #world style grid-template-rows
@@ -15,6 +15,7 @@ const toolBar = document.querySelector('#toolBar');
 const inventoryDiv = document.querySelector('#inventory');
 const inventoryBtn = document.querySelector('#inventoryBtn');
 const resetBtn = document.querySelector('#resetBtn');
+const toolBarTools = document.querySelector('#toolBarTools');
 
 const createWorld = () => {
   for(let i = 0; i < WORLD_GRID_ROWS; i++) {
@@ -74,15 +75,15 @@ const createWorld = () => {
 createWorld();
 
 const updateInventoryVariable = () => {
-  if(variables.inventory[variables.lastSelectedBlock] == undefined) {
-    variables.inventory[variables.lastSelectedBlock] = 1;
+  if(variables.inventory[variables.lastRemovedBlock] == undefined) {
+    variables.inventory[variables.lastRemovedBlock] = 1;
   }
   else {
-    variables.inventory[variables.lastSelectedBlock] += 1;
+    variables.inventory[variables.lastRemovedBlock] += 1;
   }
 }
 
-const addToInventory = (lastSelectedBlock) => {
+const addToInventory = (lastRemovedBlock) => {
   let child = inventoryDiv.firstElementChild;
   let length = child.classList.length;
   while(length == 1) {
@@ -90,8 +91,8 @@ const addToInventory = (lastSelectedBlock) => {
       child = null;
       break;
     }
-    if(child.classList.contains(lastSelectedBlock)) {
-      child.lastElementChild.textContent = variables.inventory[lastSelectedBlock];
+    if(child.classList.contains(lastRemovedBlock)) {
+      child.lastElementChild.textContent = variables.inventory[lastRemovedBlock];
       return;
     }
     child = child.nextElementSibling;
@@ -100,27 +101,25 @@ const addToInventory = (lastSelectedBlock) => {
 
   if(child == null) {
     child = inventoryDiv.firstElementChild;
-    while(!child.classList.contains(lastSelectedBlock)) {
+    while(!child.classList.contains(lastRemovedBlock)) {
       child = child.nextElementSibling;
     }
-    child.lastElementChild.textContent = variables.inventory[lastSelectedBlock];
+    child.lastElementChild.textContent = variables.inventory[lastRemovedBlock];
   }
 
-  child.classList.add(lastSelectedBlock);
-  if(child.classList.contains(lastSelectedBlock)) {
-    child.lastElementChild.textContent = variables.inventory[lastSelectedBlock];
+  child.classList.add(lastRemovedBlock);
+  if(child.classList.contains(lastRemovedBlock)) {
+    child.lastElementChild.textContent = variables.inventory[lastRemovedBlock];
   }
-  console.log(child);
-  // child.lastElementChild.textContent = variables.inventory[lastSelectedBlock];
 }
 
 world.addEventListener('click', (event) => {
   const target = event.target;
   if(target.classList.length == 1 && target.classList[0] !== 'cloud') {
-    variables.lastSelectedBlock = target.classList[0];
-    target.classList.remove(variables.lastSelectedBlock);
+    variables.lastRemovedBlock = target.classList[0];
+    target.classList.remove(variables.lastRemovedBlock);
     updateInventoryVariable();
-    addToInventory(variables.lastSelectedBlock);
+    addToInventory(variables.lastRemovedBlock);
   }
 },
 { capture: true }
@@ -128,16 +127,20 @@ world.addEventListener('click', (event) => {
 
 inventoryBtn.addEventListener('click', (event) => {
   event.preventDefault();
-  if(!variables.toggled) {
-    variables.toggled = true;
+  if(!variables.inventoryToggled) {
+    variables.inventoryToggled = true;
     inventoryDiv.classList.add('visible');
     inventoryDiv.classList.remove('hidden');
   }
   else {
-    variables.toggled = false;
+    variables.inventoryToggled = false;
     inventoryDiv.classList.remove('visible');
     inventoryDiv.classList.add('hidden');
   }
+});
+
+toolBarTools.addEventListener('click', (event) => {
+  
 });
 
 resetBtn.addEventListener('click', (event) => {
@@ -145,6 +148,6 @@ resetBtn.addEventListener('click', (event) => {
   createWorld();
   variables.inventory = {};
   variables.selectedTool = '';
-  variables.lastSelectedBlock = '';
-  variables.toggled = false;
+  variables.lastRemovedBlock = '';
+  variables.inventoryToggled = false;
 });
