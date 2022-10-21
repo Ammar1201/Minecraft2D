@@ -173,23 +173,6 @@ const updateSelectedTool = (target) => {
 //* ------------------------------------------------------------------------
 
 const updateInventorySlots = () => {
-  // let child = inventory.firstElementChild;
-
-  // if(child == null) {
-  //   return;
-  // }
-
-  // if(child.classList.contains(variables.lastRemovedInventoryBlock)) {
-  //   let amount = variables.inventory[variables.lastRemovedInventoryBlock];
-  //   if(amount == 0) {
-  //     child.lastElementChild.textContent = '';
-  //     child.classList = '';
-  //     return;
-  //   }
-  //   child.lastElementChild.textContent = amount;
-  //   return;
-  // }
-
   inventorySlots.forEach(slot => {
     if(slot.classList.contains(variables.lastRemovedInventoryBlock)) {
       let amount = variables.inventory[variables.lastRemovedInventoryBlock];
@@ -202,45 +185,6 @@ const updateInventorySlots = () => {
       return;
     }
   });
-
-  // child = child.nextElementSibling;
-
-  // while(!child.classList.contains(variables.lastRemovedInventoryBlock)) {
-  //   child = child.nextElementSibling;
-  // }
-
-  // if(child.classList.contains(variables.lastRemovedInventoryBlock)) {
-  //   let amount = variables.inventory[variables.lastRemovedInventoryBlock];
-  //   if(amount == 0) {
-  //     child.lastElementChild.textContent = '';
-  //     child.classList = '';
-  //     return;
-  //   }
-  //   child.lastElementChild.textContent = amount;
-  //   return;
-  // }
-
-  // if(variables.inventory[variables.lastRemovedInventoryBlock] === '0') {
-  //   child.classList.remove('selected');
-  //   child.classList.remove(variables.lastRemovedInventoryBlock);
-  //   return;
-  // }
-
-  // if(child == null) {
-  //   return;
-  // }
-
-  // while(child != null && !child.classList.contains(variables.lastRemovedInventoryBlock)) {
-  //   child = child.nextElementSibling;
-  // }
-  
-  // if(variables.inventory[variables.lastRemovedInventoryBlock] === '0') {
-  //   child.lastElementChild.textContent = '';
-  //   child.classList.remove(variables.lastRemovedInventoryBlock);
-  // }
-  // else {
-  //   child.lastElementChild.textContent = variables.inventory[variables.lastRemovedInventoryBlock];
-  // }
 };
 
 const placeBlock = (target) => {
