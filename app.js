@@ -14,10 +14,11 @@ const WORLD_GRID_COLUMNS = 30; // this must match #world style grid-template-col
 const startBtn = document.querySelector('#startBtn');
 const world = document.querySelector('#world');
 const toolBar = document.querySelector('#toolBar');
-const inventoryBlocks = document.querySelector('#inventory');
+const inventory = document.querySelector('#inventory');
 const inventoryBtn = document.querySelector('#inventoryBtn');
 const resetBtn = document.querySelector('#resetBtn');
 const toolBarTools = document.querySelector('#toolBarTools');
+const inventorySlots = document.querySelectorAll('#inventory > div');
 
 const createWorld = () => {
   for(let i = 0; i < WORLD_GRID_ROWS; i++) {
@@ -87,8 +88,9 @@ const updateInventoryVariable = () => {
 
 //* ------------------------------------------------------------------------
 
-const addToInventory = (lastRemovedBlock) => {
-  let child = inventoryBlocks.firstElementChild;
+const addToInventory = () => {
+  let lastRemovedBlock = variables.lastRemovedBlock;
+  let child = inventory.firstElementChild;
   let length = child.classList.length;
   while(length == 1) {
     if(child.nextElementSibling == null) {
@@ -104,7 +106,7 @@ const addToInventory = (lastRemovedBlock) => {
   }
 
   if(child == null) {
-    child = inventoryBlocks.firstElementChild;
+    child = inventory.firstElementChild;
     while(!child.classList.contains(lastRemovedBlock)) {
       child = child.nextElementSibling;
     }
@@ -122,7 +124,7 @@ const addToInventory = (lastRemovedBlock) => {
 const removeBlockAccordingToTheTool = (target) => {
   target.classList.remove(variables.lastRemovedBlock);
   updateInventoryVariable();
-  addToInventory(variables.lastRemovedBlock);
+  addToInventory();
 }
 
 //* ------------------------------------------------------------------------
@@ -170,32 +172,93 @@ const updateSelectedTool = (target) => {
 
 //* ------------------------------------------------------------------------
 
-const updateInventoryAmount = () => {
-  let child = inventoryBlocks.firstElementChild;
-  while(!child.classList.contains(variables.lastRemovedInventoryBlock)) {
-    child = child.nextElementSibling;
-  }
+const updateInventorySlots = () => {
+  // let child = inventory.firstElementChild;
+
+  // if(child == null) {
+  //   return;
+  // }
+
+  // if(child.classList.contains(variables.lastRemovedInventoryBlock)) {
+  //   let amount = variables.inventory[variables.lastRemovedInventoryBlock];
+  //   if(amount == 0) {
+  //     child.lastElementChild.textContent = '';
+  //     child.classList = '';
+  //     return;
+  //   }
+  //   child.lastElementChild.textContent = amount;
+  //   return;
+  // }
+
+  inventorySlots.forEach(slot => {
+    if(slot.classList.contains(variables.lastRemovedInventoryBlock)) {
+      let amount = variables.inventory[variables.lastRemovedInventoryBlock];
+      if(amount == 0) {
+        slot.lastElementChild.textContent = '';
+        slot.classList = '';
+        return;
+      }
+      slot.lastElementChild.textContent = amount;
+      return;
+    }
+  });
+
+  // child = child.nextElementSibling;
+
+  // while(!child.classList.contains(variables.lastRemovedInventoryBlock)) {
+  //   child = child.nextElementSibling;
+  // }
+
+  // if(child.classList.contains(variables.lastRemovedInventoryBlock)) {
+  //   let amount = variables.inventory[variables.lastRemovedInventoryBlock];
+  //   if(amount == 0) {
+  //     child.lastElementChild.textContent = '';
+  //     child.classList = '';
+  //     return;
+  //   }
+  //   child.lastElementChild.textContent = amount;
+  //   return;
+  // }
+
+  // if(variables.inventory[variables.lastRemovedInventoryBlock] === '0') {
+  //   child.classList.remove('selected');
+  //   child.classList.remove(variables.lastRemovedInventoryBlock);
+  //   return;
+  // }
+
+  // if(child == null) {
+  //   return;
+  // }
+
+  // while(child != null && !child.classList.contains(variables.lastRemovedInventoryBlock)) {
+  //   child = child.nextElementSibling;
+  // }
   
-  if(variables.inventory[variables.lastRemovedInventoryBlock] == 0) {
-    child.lastElementChild.textContent = '';
-    child.classList.remove(variables.lastRemovedInventoryBlock);
-  }
-  else {
-    child.lastElementChild.textContent = variables.inventory[variables.lastRemovedInventoryBlock];
-  }
+  // if(variables.inventory[variables.lastRemovedInventoryBlock] === '0') {
+  //   child.lastElementChild.textContent = '';
+  //   child.classList.remove(variables.lastRemovedInventoryBlock);
+  // }
+  // else {
+  //   child.lastElementChild.textContent = variables.inventory[variables.lastRemovedInventoryBlock];
+  // }
 };
 
 const placeBlock = (target) => {
-  if(target.classList.length > 0) {
-    return;
-  }
+  let amount = variables.inventory[variables.lastRemovedInventoryBlock];
+  if(amount >= 0) {
+    if(amount == 0) {
+      target.classList = '';
+      variables.inventory[variables.lastRemovedInventoryBlock] = 0;
+      updateInventorySlots();
+      return;
+    }
 
-  let amount = parseInt(variables.inventory[variables.lastRemovedInventoryBlock]);
-  if(amount > 0) {
-    target.classList.add(variables.lastRemovedInventoryBlock);
-    amount -= 1;
-    variables.inventory[variables.lastRemovedInventoryBlock] = `${amount}`;
-    updateInventoryAmount();
+    if(target.classList.length !== 1) {
+      target.classList.add(variables.lastRemovedInventoryBlock);
+      amount -= 1;
+      variables.inventory[variables.lastRemovedInventoryBlock] = amount;
+      updateInventorySlots();
+    }
   }
 };
 
@@ -222,13 +285,13 @@ const StartEventListeners = () => {
     event.preventDefault();
     if(!variables.inventoryToggled) {
       variables.inventoryToggled = true;
-      inventoryBlocks.classList.add('visible');
-      inventoryBlocks.classList.remove('hidden');
+      inventory.classList.add('visible');
+      inventory.classList.remove('hidden');
     }
     else {
       variables.inventoryToggled = false;
-      inventoryBlocks.classList.remove('visible');
-      inventoryBlocks.classList.add('hidden');
+      inventory.classList.remove('visible');
+      inventory.classList.add('hidden');
     }
   });
 
@@ -254,23 +317,31 @@ const StartEventListeners = () => {
 
   //* ------------------------------------------------------------------------
 
-  inventoryBlocks.addEventListener('click', (event) => {
+  inventory.addEventListener('click', (event) => {
+    
     const target = event.target.parentElement;
-    if(target.classList[0] === undefined) {
-      return;
-    }
-  
+
     if(target.classList[0] === 'selected') {
       target.classList.remove('selected');
       return;
     }
 
-    variables.lastRemovedInventoryBlock = target.classList[0];
-    if(variables.selectedTool === 'placingBlocks') {
+    console.log(target);
+    if(event.target.id === 'inventory' || event.target.id === 'toolBar') {
+      event.target.classList.remove('selected');
       return;
     }
-    const tool = document.querySelector(`#${variables.selectedTool}`);
-    tool.classList.remove('selected');
+
+    if(target.classList[0] === undefined) {
+      return;
+    }
+
+    if(variables.selectedTool !== 'placingBlocks') {
+      const tool = document.querySelector(`#${variables.selectedTool}`);
+      tool.classList.remove('selected');
+    }
+
+    variables.lastRemovedInventoryBlock = target.classList[0];
     target.classList.add('selected');
     variables.selectedTool = 'placingBlocks';
     variables.lastRemovedInventoryBlockAmount = target.id;
