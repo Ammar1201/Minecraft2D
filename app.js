@@ -4,7 +4,6 @@ const variables = {
   selectedTool: '',
   lastRemovedBlock: '',
   lastRemovedInventoryBlock: '',
-  lastRemovedInventoryBlockAmount: '',
   inventoryToggled: false
 }
 
@@ -68,10 +67,10 @@ const createWorld = () => {
   
         //* add grass & dirt
         if(i == 13) {
-          div.setAttribute('class', 'grass');
+          div.classList.add('grass');
         }
         if(i > 13) {
-          div.setAttribute('class', 'dirt');
+          div.classList.add('dirt');
         }
         world.appendChild(div);
       }
@@ -133,6 +132,126 @@ const createWorld = () => {
     }
   }
 }
+
+const resetWorld = () => {
+
+  let div = document.querySelector('#world > div');
+
+    //! generate world for mobile devices
+    if(window.innerWidth < 770) {
+      for(let i = 0; i < WORLD_GRID_ROWS; i++) {
+        for(let j = 0; j < 20; j++) {
+
+          div.classList = '';
+    
+          //* add clouds
+          if(i ==2 || i == 3 || i == 4) {
+            if(j == 2 || j == 3 || j == 4 || j == 5) {
+              div.classList.add('cloud');
+            }
+          }
+    
+          //* add leaves
+          if(i == 5 ) {
+            if(j == 14 || j == 15  || j == 24 || j == 25) {
+              div.classList.add('leaves');
+            }
+          }
+          if(i == 6 || i == 7 || i == 8) {
+            if(j == 13 || j == 14 || j == 15 || j == 16 || j == 23 || j == 24 || j == 25 || j == 26) {
+              div.classList.add('leaves');
+            }
+          }
+    
+          //* add wood
+          if(i === 9 || i == 10 || i == 11 || i == 12) {
+            if(j == 14 || j == 15 || j == 24 || j == 25) {
+              div.classList.add('wood');
+            }
+    
+            //* add stone
+            if(i == 11 || i == 12) {
+              if(j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
+                div.classList.add('stone');
+              }
+            }
+            if(i === 9 || i == 10) {
+              if(j == 3 || j == 4 || j == 5 || j == 6) {
+                div.classList.add('stone');
+              }
+            }
+          }
+    
+          //* add grass & dirt
+          if(i == 13) {
+            div.classList.add('grass');
+          }
+          if(i > 13) {
+            div.classList.add('dirt');
+          }
+
+          div = div.nextElementSibling;
+        }
+      }
+    }
+    //! generate world for other devices
+    else {
+      for(let i = 0; i < WORLD_GRID_ROWS; i++) {
+        for(let j = 0; j < WORLD_GRID_COLUMNS; j++) {
+
+          div.classList = '';
+  
+          //* add clouds
+          if(i ==2 || i == 3 || i == 4) {
+            if(j == 2 || j == 3 || j == 4 || j == 5) {
+              div.classList.add('cloud');
+            }
+          }
+  
+          //* add leaves
+          if(i == 5 ) {
+            if(j == 14 || j == 15  || j == 24 || j == 25) {
+              div.classList.add('leaves');
+            }
+          }
+          if(i == 6 || i == 7 || i == 8) {
+            if(j == 13 || j == 14 || j == 15 || j == 16 || j == 23 || j == 24 || j == 25 || j == 26) {
+              div.classList.add('leaves');
+            }
+          }
+  
+          //* add wood
+          if(i === 9 || i == 10 || i == 11 || i == 12) {
+            if(j == 14 || j == 15 || j == 24 || j == 25) {
+              div.classList.add('wood');
+            }
+  
+            //* add stone
+            if(i == 11 || i == 12) {
+              if(j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
+                div.classList.add('stone');
+              }
+            }
+            if(i === 9 || i == 10) {
+              if(j == 3 || j == 4 || j == 5 || j == 6) {
+                div.classList.add('stone');
+              }
+            }
+          }
+  
+          //* add grass & dirt
+          if(i == 13) {
+            div.setAttribute('class', 'grass');
+          }
+          if(i > 13) {
+            div.setAttribute('class', 'dirt');
+          }
+
+          div = div.nextElementSibling;
+        }
+      }
+    }
+};
 
 //! ---------------------Functions-------------------------------------------------------------------
 
@@ -364,11 +483,24 @@ const StartEventListeners = () => {
   //* ------------------------------------------------------------------------
 
   resetBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    createWorld();
+
+    resetWorld();
+
+    inventorySlots.forEach(slot => {
+      slot.classList = '';
+      slot.lastElementChild.textContent = '';
+    });
+
     variables.inventory = {};
+
+    if(variables.selectedTool != '' && variables.selectedTool !== 'placingBlocks') {
+      const tool = document.querySelector(`#${variables.selectedTool}`);
+      tool.classList.remove('selected');
+    }
+    
     variables.selectedTool = '';
     variables.lastRemovedBlock = '';
+    variables.lastRemovedInventoryBlock = '';
     variables.inventoryToggled = false;
   });
 }
