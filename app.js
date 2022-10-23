@@ -4,6 +4,7 @@ const variables = {
   selectedTool: '',
   lastRemovedBlock: '',
   lastRemovedInventoryBlock: '',
+  lastSelectedBlock: '',
   inventoryToggled: false
 }
 
@@ -357,6 +358,7 @@ const updateInventorySlots = () => {
       if(amount == 0) {
         slot.lastElementChild.textContent = '';
         slot.classList = '';
+        variables.selectedTool = '';
         return;
       }
       slot.lastElementChild.textContent = amount;
@@ -405,6 +407,7 @@ const StartEventListeners = () => {
 
     if(variables.selectedTool === 'placingBlocks') {
       placeBlock(target);
+      console.log('placed');
     }
   },
   { capture: true }
@@ -430,6 +433,11 @@ const StartEventListeners = () => {
 
   toolBarTools.addEventListener('click', (event) => {
     const target = event.target;
+
+    if(variables.lastSelectedBlock !== '') {
+      variables.lastSelectedBlock.classList.remove('selected');
+      variables.lastSelectedBlock = '';
+    }
   
     if(variables.selectedTool === 'placingBlocks') {
       selectFirstTool(target);
@@ -451,13 +459,19 @@ const StartEventListeners = () => {
   inventory.addEventListener('click', (event) => {
     
     const target = event.target.parentElement;
-
+    
+    if(variables.lastSelectedBlock !== '' && variables.lastSelectedBlock !== target) {
+      if(variables.lastSelectedBlock.classList.contains('selected')) {
+        variables.lastSelectedBlock.classList.remove('selected');
+      }
+    }
+    
+    
     if(target.classList[0] === 'selected') {
-      target.classList.remove('selected');
+      target.classList = '';
       return;
     }
-
-    console.log(target);
+    
     if(event.target.id === 'inventory' || event.target.id === 'toolBar') {
       event.target.classList.remove('selected');
       return;
@@ -466,23 +480,26 @@ const StartEventListeners = () => {
     if(target.classList[0] === undefined) {
       return;
     }
-
+    
     if(variables.selectedTool !== 'placingBlocks') {
-      const tool = document.querySelector(`#${variables.selectedTool}`);
-      tool.classList.remove('selected');
+      if(variables.selectedTool !== '') {
+        const tool = document.querySelector(`#${variables.selectedTool}`);
+        tool.classList.remove('selected');
+      }
     }
-
+    
+    variables.lastSelectedBlock = target;
     variables.lastRemovedInventoryBlock = target.classList[0];
     target.classList.add('selected');
     variables.selectedTool = 'placingBlocks';
-    variables.lastRemovedInventoryBlockAmount = target.id;
+
   },
   { capture: true }
   );
 
   //* ------------------------------------------------------------------------
 
-  resetBtn.addEventListener('click', (event) => {
+  resetBtn.addEventListener('click', () => {
 
     resetWorld();
 
