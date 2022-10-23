@@ -407,7 +407,6 @@ const StartEventListeners = () => {
 
     if(variables.selectedTool === 'placingBlocks') {
       placeBlock(target);
-      console.log('placed');
     }
   },
   { capture: true }
